@@ -13,10 +13,10 @@
 #define BALL_RADIUS 8
 #define BLOCK_WIDTH 70
 #define BLOCK_HEIGHT 25
-#define BLOCKS_PER_ROW 10
-#define BLOCK_ROWS 5
+#define BLOCKS_PER_ROW 11
+#define BLOCK_ROWS 8
 #define INITIAL_LIVES 3
-#define BASE_BALL_SPEED 3.0f
+#define BASE_BALL_SPEED 5.0f
 
 enum GameState {
     MENU,
@@ -86,10 +86,6 @@ int mouseX = WINDOW_WIDTH / 2;
 int highScore = 0;
 
 
-float bgR = 0.1f, bgG = 0.1f, bgB = 0.2f; // starting background color
-float bgSpeed = 0.002f;                   // how fast it shifts
-float bgPhase = 0.0f;                     // for smooth oscillation
-
 
 // Game objects
 std::vector<Block> blocks;
@@ -107,12 +103,12 @@ void initBlocks();
 void drawPaddle();
 void drawBall();
 void drawBlocks();
+void spawnPerk(float x, float y);
 void drawPerks();
 void drawText(float x, float y, const char* text);
 void drawMenu();
 void drawHUD();
 void checkCollisions();
-void spawnPerk(float x, float y);
 void updatePerks();
 void resetBall();
 void resetGame();
@@ -123,26 +119,68 @@ void loadHighScore();
 void saveHighScore();
 void drawHighScore();
 void drawHelp();
+void spawnParticles(float x, float y, float r, float g, float b);
 void drawParticles();
 void updateParticles();
-void spawnParticles(float x, float y, float r, float g, float b);
 
-// Update background color
-void updateBackgroundColor() {
-    // Use sin() waves to smoothly transition color channels
-    bgPhase += bgSpeed;
 
-    bgR = 0.3f + 0.3f * sin(bgPhase);
-    bgG = 0.3f + 0.3f * sin(bgPhase + 2.0f);
-    bgB = 0.3f + 0.3f * sin(bgPhase + 4.0f);
+// Initialize blocks
+void initBlocks() {
+    blocks.clear();
+    float startX = (WINDOW_WIDTH - (BLOCKS_PER_ROW * BLOCK_WIDTH)) / 2;
+    float startY = WINDOW_HEIGHT - 100;
+    
+    for (int row = 0; row < BLOCK_ROWS; row++) {
+        for (int col = 0; col < BLOCKS_PER_ROW; col++) {
+            Block block;
+            block.x = startX + col * BLOCK_WIDTH + 5;
+            block.y = startY - row * BLOCK_HEIGHT - 5;
+            block.width = BLOCK_WIDTH - 10;
+            block.height = BLOCK_HEIGHT - 5;
+            block.active = true;
+            block.hits = 1;
+            
+        // Assign colors based on row (soft futuristic palette)
+            switch (row) {
+                case 0: // Crimson Red
+                    block.r = 0.91f; block.g = 0.30f; block.b = 0.23f;
+                    break;
+                case 1: // Sunset Orange
+                    block.r = 0.90f; block.g = 0.49f; block.b = 0.13f;
+                    break;
+                case 2: // Golden Yellow
+                    block.r = 0.95f; block.g = 0.77f; block.b = 0.06f;
+                    break;
+                case 3: // Emerald Green
+                    block.r = 0.18f; block.g = 0.80f; block.b = 0.44f;
+                    break;
+                case 4: // Sky Blue
+                    block.r = 0.20f; block.g = 0.60f; block.b = 0.86f;
+                    break;
+                
+            }
 
-    // Clamp to range 0–1 just in case (for safety)
-    bgR = fmax(0.0f, fmin(1.0f, bgR));
-    bgG = fmax(0.0f, fmin(1.0f, bgG));
-    bgB = fmax(0.0f, fmin(1.0f, bgB));
 
-    glClearColor(bgR, bgG, bgB, 1.0f);
+            
+            // Random perks (20% chance)
+            int perkChance = rand() % 100;
+            if (perkChance < 5) block.perk = EXTRA_LIFE;
+            else if (perkChance < 10) block.perk = FASTER_BALL;
+            else if (perkChance < 15) block.perk = WIDER_PADDLE;
+            else block.perk = NO_PERK;
+            
+            blocks.push_back(block);
+        }
+    }
 }
+
+void updateBackgroundColor() {
+    float r = 25.0f / 255.0f;
+    float g = 35.0f / 255.0f;
+    float b = 45.0f / 255.0f;
+    glClearColor(r, g, b, 1.0f);
+}
+
 
 // Load high score from file
 void loadHighScore() {
@@ -164,42 +202,7 @@ void saveHighScore() {
     }
 }
 
-// Initialize blocks
-void initBlocks() {
-    blocks.clear();
-    float startX = (WINDOW_WIDTH - (BLOCKS_PER_ROW * BLOCK_WIDTH)) / 2;
-    float startY = WINDOW_HEIGHT - 100;
-    
-    for (int row = 0; row < BLOCK_ROWS; row++) {
-        for (int col = 0; col < BLOCKS_PER_ROW; col++) {
-            Block block;
-            block.x = startX + col * BLOCK_WIDTH + 5;
-            block.y = startY - row * BLOCK_HEIGHT - 5;
-            block.width = BLOCK_WIDTH - 10;
-            block.height = BLOCK_HEIGHT - 5;
-            block.active = true;
-            block.hits = 1;
-            
-            // Assign colors based on row
-            switch(row) {
-                case 0: block.r = 1.0f; block.g = 0.0f; block.b = 0.0f; break;
-                case 1: block.r = 1.0f; block.g = 0.5f; block.b = 0.0f; break;
-                case 2: block.r = 1.0f; block.g = 1.0f; block.b = 0.0f; break;
-                case 3: block.r = 0.0f; block.g = 1.0f; block.b = 0.0f; break;
-                case 4: block.r = 0.0f; block.g = 0.5f; block.b = 1.0f; break;
-            }
-            
-            // Random perks (20% chance)
-            int perkChance = rand() % 100;
-            if (perkChance < 5) block.perk = EXTRA_LIFE;
-            else if (perkChance < 10) block.perk = FASTER_BALL;
-            else if (perkChance < 15) block.perk = WIDER_PADDLE;
-            else block.perk = NO_PERK;
-            
-            blocks.push_back(block);
-        }
-    }
-}
+
 
 // Draw text on screen
 void drawText(float x, float y, const char* text) {
@@ -259,7 +262,6 @@ void drawBlocks() {
         }
     }
 }
-
 
 
 
@@ -453,8 +455,6 @@ void updateParticles() {
 
 
 
-
-
 // Update perks
 void updatePerks() {
     for (size_t i = 0; i < perks.size(); i++) {
@@ -593,7 +593,6 @@ void resetGame() {
     initBlocks();
     resetBall();
 }
-
 
 
 
@@ -737,6 +736,7 @@ void specialKeyboard(int key, int x, int y) {
 }
 
 // Mouse motion
+
 void mouse(int x, int y) {
     if (gameState == PLAYING) {
         mouseX = x;
