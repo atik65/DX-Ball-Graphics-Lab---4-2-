@@ -1,2 +1,0 @@
-Extra Features:
-- Colorful Background
