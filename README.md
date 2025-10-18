@@ -22,15 +22,15 @@ Break blocks, collect perks, and achieve the highest score!
 
 ## **Controls**
 
-| Action | Key / Input |
-|--------|-------------|
-| Move Paddle | Mouse or LEFT/RIGHT Arrow Keys |
-| Launch Ball | Click Mouse or SPACE |
-| Pause/Resume | P |
-| Exit Game | ESC |
-| Go Back (from Highscore/Help) | B |
-| Highscore Menu | H (from main menu) |
-| Help Menu | F (from main menu) |
+| Action                        | Key / Input                    |
+| ----------------------------- | ------------------------------ |
+| Move Paddle                   | Mouse or LEFT/RIGHT Arrow Keys |
+| Launch Ball                   | Click Mouse or SPACE           |
+| Pause/Resume                  | P                              |
+| Exit Game                     | ESC                            |
+| Go Back (from Highscore/Help) | B                              |
+| Highscore Menu                | H (from main menu)             |
+| Help Menu                     | F (from main menu)             |
 
 ---
 
@@ -43,87 +43,28 @@ Break blocks, collect perks, and achieve the highest score!
 g++ main.cpp -o DXBall -lGL -lGLU -lglut
 ./DXBall
 ```
-
-
-Sure! I can help you generate a **`README.md` file** for your DX-Ball project that’s clean, professional, and informative. Here’s a good version tailored for your project:
-
----
-
-````markdown
-# DX-Ball Game (OpenGL / C++)
-
-A classic **DX-Ball** clone built in **C++** using **OpenGL (GLUT)**.  
-Break blocks, collect perks, and achieve the highest score!
-
----
-
-## **Features**
-
-- Classic brick-breaking gameplay
-- Multiple **perks**:
-  - Green Box → Extra Life
-  - Red Box → Faster Ball
-  - Blue Box → Wider Paddle
-- **Particle effects** for block destruction
-- Dynamic **ball speed increase**
-- **Highscore tracking** saved in `highscore.txt`
-- Pause, Menu, Help, and Highscore screens
-- Mouse and keyboard controls
-
----
-
-## **Controls**
-
-| Action | Key / Input |
-|--------|-------------|
-| Move Paddle | Mouse or LEFT/RIGHT Arrow Keys |
-| Launch Ball | Click Mouse or SPACE |
-| Pause/Resume | P |
-| Exit Game | ESC |
-| Go Back (from Highscore/Help) | B |
-| Highscore Menu | H (from main menu) |
-| Help Menu | F (from main menu) |
-
----
-
-## **Installation / Running**
-
-1. Make sure you have **OpenGL and GLUT** installed.
-2. Compile the project:
-
-```bash
-g++ main.cpp -o DXBall -lGL -lGLU -lglut
-````
-
-3. Run the game:
-
-```bash
-./DXBall
-```
-
----
 
 ## **Game Architecture**
 
-* **Main Components:**
+- **Main Components:**
 
-  * `Block` → Stores block position, color, hits, and perks
-  * `PerkItem` → Stores falling perks
-  * `Particle` → Stores particles for visual effects
+  - `Block` → Stores block position, color, hits, and perks
+  - `PerkItem` → Stores falling perks
+  - `Particle` → Stores particles for visual effects
 
-* **Key Functions:**
+- **Key Functions:**
 
-  * `initBlocks()` → Initialize blocks with colors and perks
-  * `drawPaddle()`, `drawBall()`, `drawBlocks()`, `drawPerks()`, `drawParticles()` → Rendering
-  * `update()` → Game logic: move ball, check collisions, update perks and particles
-  * `checkCollisions()` → Handles ball collisions with paddle, blocks, walls
-  * `spawnPerk()` → Generates a new perk when a block is destroyed
-  * `spawnParticles()` → Particle effect for block destruction
-  * `resetBall()` / `resetGame()` → Resets ball or whole game
+  - `initBlocks()` → Initialize blocks with colors and perks
+  - `drawPaddle()`, `drawBall()`, `drawBlocks()`, `drawPerks()`, `drawParticles()` → Rendering
+  - `update()` → Game logic: move ball, check collisions, update perks and particles
+  - `checkCollisions()` → Handles ball collisions with paddle, blocks, walls
+  - `spawnPerk()` → Generates a new perk when a block is destroyed
+  - `spawnParticles()` → Particle effect for block destruction
+  - `resetBall()` / `resetGame()` → Resets ball or whole game
 
-* **Game States:**
+- **Game States:**
 
-  * MENU, PLAYING, PAUSED, WON, LOST, HIGHSCORE, HELP
+  - MENU, PLAYING, PAUSED, WON, LOST, HIGHSCORE, HELP
 
 ---
 
@@ -140,21 +81,18 @@ g++ main.cpp -o DXBall -lGL -lGLU -lglut
 
 ## **Highscore**
 
-* Stored in `highscore.txt`
-* Automatically updated if the player exceeds previous high score
+- Stored in `highscore.txt`
+- Automatically updated if the player exceeds previous high score
 
 ---
 
-
-
 ## **Credits**
 
-* Developed by: **Md. Atikul Islam Atik**
-* Built with **C++** and **OpenGL / GLUT**
+- Developed by: **Md. Atikul Islam Atik**
+- Built with **C++** and **OpenGL / GLUT**
 
 ---
 
 ## **License**
 
 This project is open-source and free to use for educational purposes.
-
