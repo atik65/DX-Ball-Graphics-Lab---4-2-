@@ -1,324 +1,160 @@
-# DX-Ball-Graphics-Lab---4-2-
+# DX-Ball Game (OpenGL / C++)
+
+A classic **DX-Ball** clone built in **C++** using **OpenGL (GLUT)**.  
+Break blocks, collect perks, and achieve the highest score!
 
 ---
 
-# **DX-Ball Game – Function Notes**
+## **Features**
+
+- Classic brick-breaking gameplay
+- Multiple **perks**:
+  - Green Box → Extra Life
+  - Red Box → Faster Ball
+  - Blue Box → Wider Paddle
+- **Particle effects** for block destruction
+- Dynamic **ball speed increase**
+- **Highscore tracking** saved in `highscore.txt`
+- Pause, Menu, Help, and Highscore screens
+- Mouse and keyboard controls
 
 ---
 
-## **1️⃣ `init()`**
+## **Controls**
 
-- **Purpose:** Initializes OpenGL settings, random seed, and game objects.
-- **What it does:**
-
-  - Sets the background color.
-  - Sets 2D orthographic projection.
-  - Seeds the random number generator (`srand(time(NULL))`).
-  - Calls `initBlocks()` to set up the block layout.
-  - Calls `loadHighScore()` to read high scores from file.
-
-- **Called:** Once in `main()` before the game loop.
-- **Flow position:** Game startup / menu preparation.
+| Action | Key / Input |
+|--------|-------------|
+| Move Paddle | Mouse or LEFT/RIGHT Arrow Keys |
+| Launch Ball | Click Mouse or SPACE |
+| Pause/Resume | P |
+| Exit Game | ESC |
+| Go Back (from Highscore/Help) | B |
+| Highscore Menu | H (from main menu) |
+| Help Menu | F (from main menu) |
 
 ---
 
-## **2️⃣ `initBlocks()`**
+## **Installation / Running**
 
-- **Purpose:** Creates all the blocks (bricks) for the current level.
-- **What it does:**
+1. Make sure you have **OpenGL and GLUT** installed.
+2. Compile the project:
 
-  - Clears existing blocks (`blocks.clear()`).
-  - Computes positions for all blocks based on row/column.
-  - Sets size, active status, color, and hits.
-  - Randomly assigns perks to some blocks (`EXTRA_LIFE`, `FASTER_BALL`, `WIDER_PADDLE`, or `NO_PERK`).
-  - Adds them to the global `blocks` vector.
+```bash
+g++ main.cpp -o DXBall -lGL -lGLU -lglut
+./DXBall
+```
 
-- **Called:**
 
-  - From `init()` at game start.
-  - From `resetGame()` when restarting the game.
-
-- **Flow position:** Sets up game level before gameplay.
+Sure! I can help you generate a **`README.md` file** for your DX-Ball project that’s clean, professional, and informative. Here’s a good version tailored for your project:
 
 ---
 
-## **3️⃣ `drawText(float x, float y, const char* text)`**
+````markdown
+# DX-Ball Game (OpenGL / C++)
 
-- **Purpose:** Draws text on the screen.
-- **What it does:** Uses `glutBitmapCharacter()` to render letters at `(x, y)`.
-- **Called:** From various functions:
-
-  - `drawHUD()`
-  - `drawMenu()`
-  - `drawHighScore()`
-  - `drawHelp()`
-  - Game end messages (WON, LOST)
-
-- **Flow position:** Rendering helper.
+A classic **DX-Ball** clone built in **C++** using **OpenGL (GLUT)**.  
+Break blocks, collect perks, and achieve the highest score!
 
 ---
 
-## **4️⃣ `drawPaddle()`**
+## **Features**
 
-- **Purpose:** Draws the player paddle.
-- **What it does:**
-
-  - Draws a rectangle at `(paddleX, paddleY)` with `paddleWidth`.
-  - Sets paddle color.
-
-- **Called:** Every frame from `display()` when `gameState` is `PLAYING` or `PAUSED`.
-
----
-
-## **5️⃣ `drawBall()`**
-
-- **Purpose:** Draws the ball.
-- **What it does:**
-
-  - Draws a circle at `(ballX, ballY)` using `GL_TRIANGLE_FAN`.
-  - Sets ball color.
-
-- **Called:** Every frame from `display()` when `gameState` is `PLAYING` or `PAUSED`.
+- Classic brick-breaking gameplay
+- Multiple **perks**:
+  - Green Box → Extra Life
+  - Red Box → Faster Ball
+  - Blue Box → Wider Paddle
+- **Particle effects** for block destruction
+- Dynamic **ball speed increase**
+- **Highscore tracking** saved in `highscore.txt`
+- Pause, Menu, Help, and Highscore screens
+- Mouse and keyboard controls
 
 ---
 
-## **6️⃣ `drawBlocks()`**
+## **Controls**
 
-- **Purpose:** Draws all active blocks.
-- **What it does:**
-
-  - Loops through `blocks` vector.
-  - Checks `active` status.
-  - Draws rectangle using `GL_QUADS`.
-  - Optionally draws block borders (outline).
-
-- **Called:** Every frame from `display()` when `gameState` is `PLAYING` or `PAUSED`.
-
----
-
-## **7️⃣ `drawPerks()`**
-
-- **Purpose:** Draws active perk items (falling power-ups).
-- **What it does:**
-
-  - Loops through `perks` vector.
-  - Checks `active` status.
-  - Draws small colored squares representing the perk.
-
-- **Called:** Every frame from `display()` when `gameState` is `PLAYING` or `PAUSED`.
+| Action | Key / Input |
+|--------|-------------|
+| Move Paddle | Mouse or LEFT/RIGHT Arrow Keys |
+| Launch Ball | Click Mouse or SPACE |
+| Pause/Resume | P |
+| Exit Game | ESC |
+| Go Back (from Highscore/Help) | B |
+| Highscore Menu | H (from main menu) |
+| Help Menu | F (from main menu) |
 
 ---
 
-## **8️⃣ `drawParticles()`**
+## **Installation / Running**
 
-- **Purpose:** Draws explosion/spark particles.
-- **What it does:**
+1. Make sure you have **OpenGL and GLUT** installed.
+2. Compile the project:
 
-  - Loops through `particles` vector.
-  - Checks `active` status.
-  - Draws points at `(x, y)` with color `(r, g, b)` and fading (`life`).
+```bash
+g++ main.cpp -o DXBall -lGL -lGLU -lglut
+````
 
-- **Called:** Every frame from `display()` when `gameState` is `PLAYING` or `PAUSED`.
+3. Run the game:
 
----
-
-## **9️⃣ `drawHUD()`**
-
-- **Purpose:** Draws game information (lives, score, time, ball speed).
-- **What it does:**
-
-  - Draws `Lives`, `Score`, `Time`, and `Ball Speed` using `drawText()`.
-
-- **Called:** Every frame from `display()` when `gameState` is `PLAYING` or `PAUSED`.
+```bash
+./DXBall
+```
 
 ---
 
-## **🔟 `drawMenu()`**
+## **Game Architecture**
 
-- **Purpose:** Draws main menu.
-- **What it does:**
+* **Main Components:**
 
-  - Shows game title, instructions, and navigation hints (SPACE, ESC, H, F).
+  * `Block` → Stores block position, color, hits, and perks
+  * `PerkItem` → Stores falling perks
+  * `Particle` → Stores particles for visual effects
 
-- **Called:** From `display()` when `gameState == MENU`.
+* **Key Functions:**
 
----
+  * `initBlocks()` → Initialize blocks with colors and perks
+  * `drawPaddle()`, `drawBall()`, `drawBlocks()`, `drawPerks()`, `drawParticles()` → Rendering
+  * `update()` → Game logic: move ball, check collisions, update perks and particles
+  * `checkCollisions()` → Handles ball collisions with paddle, blocks, walls
+  * `spawnPerk()` → Generates a new perk when a block is destroyed
+  * `spawnParticles()` → Particle effect for block destruction
+  * `resetBall()` / `resetGame()` → Resets ball or whole game
 
-## **1️⃣1️⃣ `drawHighScore()`**
+* **Game States:**
 
-- **Purpose:** Shows high score screen.
-- **What it does:**
-
-  - Displays the highest score.
-  - Displays instruction to go back (`B` key).
-
-- **Called:** From `display()` when `gameState == HIGHSCORE`.
-
----
-
-## **1️⃣2️⃣ `drawHelp()`**
-
-- **Purpose:** Shows help/instructions screen.
-- **What it does:**
-
-  - Displays gameplay goal, controls, and perks explanation.
-  - Instruction to go back (`B` key).
-
-- **Called:** From `display()` when `gameState == HELP`.
+  * MENU, PLAYING, PAUSED, WON, LOST, HIGHSCORE, HELP
 
 ---
 
-## **1️⃣3️⃣ `spawnPerk(float x, float y)`**
+## **Gameplay Flow**
 
-- **Purpose:** Creates a falling perk item.
-- **What it does:**
-
-  - Creates a `PerkItem`.
-  - Sets position `(x, y)`.
-  - Sets downward velocity (`vy = -2`).
-  - Randomly assigns perk type (`EXTRA_LIFE`, `FASTER_BALL`, `WIDER_PADDLE`) and color.
-  - Adds it to `perks` vector.
-
-- **Called:** Inside `checkCollisions()` when a block with a perk is destroyed.
+1. Start at **Menu** → Press SPACE to play
+2. Move the paddle → Launch ball
+3. Break all blocks to **win**
+4. Collect perks for advantages
+5. If ball falls → lose a life
+6. Game over → Press SPACE to return to Menu
 
 ---
 
-## **1️⃣4️⃣ `spawnParticles(float x, float y, float r, float g, float b)`**
+## **Highscore**
 
-- **Purpose:** Creates a visual explosion when a block is destroyed.
-- **What it does:**
-
-  - Generates ~20 particles at `(x, y)` with random velocities.
-  - Sets color `(r, g, b)` based on the block.
-  - Adds them to `particles` vector.
-
-- **Called:** Inside `checkCollisions()` when a block is destroyed.
+* Stored in `highscore.txt`
+* Automatically updated if the player exceeds previous high score
 
 ---
 
-## **1️⃣5️⃣ `updateParticles()`**
 
-- **Purpose:** Updates particle positions and life for animation.
-- **What it does:**
 
-  - Moves particles based on `vx, vy`.
-  - Applies gravity (`vy -= 0.05`).
-  - Fades particles (`life -= 0.02`).
-  - Deactivates particle when `life <= 0`.
+## **Credits**
 
-- **Called:** Every frame from `update()` when `gameState == PLAYING`.
+* Developed by: **Md. Atikul Islam Atik**
+* Built with **C++** and **OpenGL / GLUT**
 
 ---
 
-## **1️⃣6️⃣ `updatePerks()`**
+## **License**
 
-- **Purpose:** Updates falling perks.
-- **What it does:**
+This project is open-source and free to use for educational purposes.
 
-  - Moves each active perk down (`y += vy`).
-  - Checks for collision with paddle:
-
-    - Applies effect (`EXTRA_LIFE`, `FASTER_BALL`, `WIDER_PADDLE`).
-    - Deactivates perk.
-
-  - Deactivates perk if off-screen.
-
-- **Called:** Every frame from `update()` when `gameState == PLAYING`.
-
----
-
-## **1️⃣7️⃣ `checkCollisions()`**
-
-- **Purpose:** Handles all collision logic.
-- **What it does:**
-
-  - Ball ↔ walls → reverse velocity.
-  - Ball ↔ paddle → bounce and adjust angle.
-  - Ball ↔ blocks → destroy block, spawn particles/perks, increase score, adjust ball speed.
-  - Ball fell below screen → reduce lives, reset ball, or end game.
-  - Win condition → all blocks destroyed → `gameState = WON`.
-
-- **Called:** Every frame from `update()` when ball is launched.
-
----
-
-## **1️⃣8️⃣ `resetBall()`**
-
-- **Purpose:** Puts the ball back on paddle.
-- **What it does:**
-
-  - Resets position to above paddle.
-  - Resets velocity to `BASE_BALL_SPEED`.
-  - Marks `ballLaunched = false`.
-
-- **Called:**
-
-  - When player loses a life but has remaining lives.
-  - From `resetGame()`.
-
----
-
-## **1️⃣9️⃣ `resetGame()`**
-
-- **Purpose:** Resets the whole game state.
-- **What it does:**
-
-  - Sets lives, score, gameTime, ballSpeed, paddleWidth.
-  - Clears perks.
-  - Calls `initBlocks()` to rebuild the blocks.
-  - Calls `resetBall()`.
-
-- **Called:**
-
-  - When game starts from menu (`SPACE` key).
-  - Optionally when restarting after WON/LOST.
-
----
-
-## **2️⃣0️⃣ `update(int value)`**
-
-- **Purpose:** Main game logic updater (runs every frame).
-- **What it does:**
-
-  - Moves ball if launched.
-  - Normalizes ball speed.
-  - Calls `checkCollisions()`.
-  - Calls `updatePerks()` and `updateParticles()`.
-  - Updates `gameTime`.
-  - Requests next frame via `glutTimerFunc(16, update, 0)` → ~60 FPS.
-
-- **Called:** First time from `main()` via:
-
-  ```cpp
-  glutTimerFunc(0, update, 0);
-  ```
-
-  Then recursively schedules itself every 16 ms.
-
----
-
-## **2️⃣1️⃣ `keyboard(unsigned char key, int x, int y)`**
-
-- **Purpose:** Handles normal key input.
-- **What it does:**
-
-  - ESC → exit.
-  - SPACE → start game / launch ball / back to menu.
-  - P → pause/resume.
-  - H → high score menu.
-  - F → help menu.
-  - B → back to main menu.
-
-- **Called:** Automatically by GLUT when a key is pressed.
-
----
-
-## **2️⃣2️⃣ `specialKeyboard(int key, int x, int y)`**
-
-- **Purpose:** Handles special keys (arrow keys).
-- **What it does:**
-
-  - LEFT → move paddle left.
-  - RIGHT → move paddle right.
-
-- **Called:** Automatically by GLUT when a special key is pressed.
